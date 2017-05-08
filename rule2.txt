@@ -1,0 +1,24 @@
+
+// 类似clips的写法
+rule :
+    IF
+        person name ?name1 age ?age1
+        shop name ?name2 age ?age2
+        (test (= ?age1 ?age2))
+    THEN
+        do somethings
+
+//类似drools的写法
+
+rule R1
+		
+	when
+		
+		$p : Person()
+		
+		$s : ClassB(age == p.age)
+
+	then
+		
+		do somethings
+end

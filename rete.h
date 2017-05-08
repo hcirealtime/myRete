@@ -11,14 +11,27 @@
 
 typedef function<bool (DATA_OBJECT*, DATA_OBJECT*) > FunctionCall;
 struct BetaNode;
+struct AlphaNode;
+struct AlphaMemory;
 struct AlphaNode{
     string checkAttriName;
-    map<string,AlphaNode*> child;
-    bool isAM;
-	string ruleAttriValue;
+    vector<AlphaNode*> child;
+    AlphaMemory* AM;
+    FunctionCall functionName;
+    DATA_OBJECT* cmpDATA;
+    string cmpAttri;
+    AlphaNode(FunctionCall fname = NULL,AlphaMemory* am = NULL):functionName(fname),AM(am){}
+    AlphaNode(FunctionCall fname,string aName):functionName(fname),checkAttriName(aName){}
+    AlphaNode(AlphaMemory* am):AM(am){}
+};
+struct ElementTypeNode{
+    map<string,AlphaNode*> alphaNodes;
+};
+struct AlphaMemory{
     list<Fact*> alphaMemory;
     vector<BetaNode*> betaNodes;
-    AlphaNode(string name = "ELEMENT",bool last = false):checkAttriName(name),isAM(last){}
+    AlphaMemory(AlphaNode* fatherNode){fatherNode->AM = this;}
+    AlphaMemory(){}
 };
 struct AlphaMatch{
     Fact* fact;
@@ -51,16 +64,24 @@ struct BetaNode{
 	int disToEnd;
 	long long deadline;
 	vector<EvaluationNode*> evaluations;
-	BetaNode(bool fj = false):firstJoin(fj)
-	{
-	    InitializeCriticalSectionAndSpinCount(&nodeSection,1000);
+	void init(){
+        InitializeCriticalSectionAndSpinCount(&nodeSection,1000);
 	    numOfInstance = 0;
 	    isRunning = false;
+	}
+	BetaNode(bool fj = false):firstJoin(fj)
+	{
+        init();
+	}
+	BetaNode(AlphaMemory* rightInput,BetaNode* leftInput,bool fj = false):firstJoin(fj){
+	    init();
+	    rightInput->betaNodes.push_back(this);
+	    leftInput->childNode.push_back(this);
 	}
 };
 
 
-void factToAM(Fact* fact,AlphaNode* root);
+void factToAM(Fact* fact,ElementTypeNode* root);
 PartialMatch* mergePartialMatch(PartialMatch* lhsBinds,AlphaMatch* alphaMatch);
 void networkLeft(PartialMatch* lhsBinds,BetaNode* curNode);
 void networkRight(AlphaMatch* rhsBinds,BetaNode* curNode);

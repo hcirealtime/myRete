@@ -1,0 +1,279 @@
+package com.drools.rules;
+import java.io.File;
+import java.io.PrintStream;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+global SimpleDateFormat matter;
+global String endTime;
+
+declare ClassA
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassB
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassC
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassD
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassE
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassF
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassG
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassH
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassI
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare ClassJ
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+
+declare Class_a
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_b
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_c
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_d
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_e
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_f
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_g
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_h
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_i
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+declare Class_j
+	@role(event)
+	timestamp:int
+	val1:int
+	val2:int
+	val3:int
+end
+
+
+
+rule startRule
+    when 
+        eval(true)
+    then
+        System.setOut(new PrintStream(new FileOutputStream("output.txt") ) );
+        System.out.println("start running");
+end
+
+/**/
+rule clipsRule1
+	salience 10
+	when
+		$a1 : ClassA(timestamp > 500)
+		$b2 : ClassB(val1 == $a1.val1 && val2 == $a1.val2)
+		$c3 : ClassC(val2 == $b2.val2)
+		$d4 : ClassD(val3 == $c3.val3)
+	then
+		System.out.println("clipsrule1 "  + matter.format(new Date() ) );
+end
+/**/
+rule clipsRule2
+	salience 50
+	when
+		$a1 : ClassA(timestamp > 500)
+		$c2 : ClassC(timestamp == $a1.timestamp  && val2 == $a1.val2)
+		$d3 : ClassD(val1 == $c2.val1)
+		$e4 : ClassE(val2 == $d3.val2)
+		$f5 : ClassF(val3 == $e4.val3)
+	then
+		System.out.println("clipsrule2 " +  matter.format(new Date() ) );
+		
+		//System.out.println("ClassA" + $a1.getVal1() + " " + $a1.getVal2() + " " + $a1.getVal3() + " " + $a1.getTimestamp());
+		//System.out.println("ClassC" + $c2.getVal1() + " " + $c2.getVal2() + " " + $c2.getVal3() + " " + $c2.getTimestamp());
+		//System.out.println("ClassD" + $d3.getVal1() + " " + $d3.getVal2() + " " + $d3.getVal3() + " " + $d3.getTimestamp());
+		//System.out.println("ClassE" + $e4.getVal1() + " " + $e4.getVal2() + " " + $e4.getVal3() + " " + $e4.getTimestamp());
+		//System.out.println("ClassF" + $f5.getVal1() + " " + $f5.getVal2() + " " + $f5.getVal3() + " " + $f5.getTimestamp());
+		
+end
+/**/
+rule clipsRule3
+	salience 30
+	when
+		$a1 : ClassA(timestamp > 500)
+		$b2 : ClassB(val1 == $a1.val1 && val2 == $a1.val2)
+		$g3 : ClassG(timestamp == $b2.timestamp)
+		$h4 : ClassH(val1 == $g3.val1)
+		$d5 : ClassD(val2 == $h4.val2)
+		//$e6 : ClassE(val3 == $d5.val3)
+	then
+		System.out.println("clipsrule3 " + matter.format(new Date() ) );
+end
+/**/
+rule clipsRule4
+	salience 40
+	when
+		$i1 : ClassI(timestamp > 500)
+		$j2 : ClassJ(timestamp == $i1.timestamp  && val2 == $i1.val2)
+		$a3 : ClassA(val1 == $j2.val1)
+	then
+		System.out.println("clipsrule4 " + matter.format(new Date() ) );
+end
+/**/
+
+
+/**/
+rule clipsRule5
+	salience 20
+	when
+		$a1 : Class_a(timestamp > 500)
+		$b2 : Class_b(val1 == $a1.val1 && val2 == $a1.val2)
+		$c3 : Class_c(val2 == $b2.val2)
+		$d4 : Class_d(val3 == $c3.val3)
+	then
+		System.out.println("clipsrule5 "  + matter.format(new Date() ) );
+end
+/**/
+rule clipsRule6
+	salience 30
+	when
+		$a1 : Class_a(timestamp > 500)
+		$c2 : Class_c(timestamp == $a1.timestamp  && val2 == $a1.val2)
+		$d3 : Class_d(val1 == $c2.val1)
+		$e4 : Class_e(val2 == $d3.val2)
+		$f5 : Class_f(val3 == $e4.val3)
+	then
+		System.out.println("clipsrule6 " +  matter.format(new Date() ) );
+		
+		//System.out.println("Class_a" + $a1.getVal1() + " " + $a1.getVal2() + " " + $a1.getVal3() + " " + $a1.getTimestamp());
+		//System.out.println("Class_c" + $c2.getVal1() + " " + $c2.getVal2() + " " + $c2.getVal3() + " " + $c2.getTimestamp());
+		//System.out.println("Class_d" + $d3.getVal1() + " " + $d3.getVal2() + " " + $d3.getVal3() + " " + $d3.getTimestamp());
+		//System.out.println("Class_e" + $e4.getVal1() + " " + $e4.getVal2() + " " + $e4.getVal3() + " " + $e4.getTimestamp());
+		//System.out.println("Class_f" + $f5.getVal1() + " " + $f5.getVal2() + " " + $f5.getVal3() + " " + $f5.getTimestamp());
+		
+end
+/**/
+rule clipsRule7
+	salience 40
+	when
+		$a1 : Class_a(timestamp > 500)
+		$b2 : Class_b(val1 == $a1.val1 && val2 == $a1.val2)
+		$g3 : Class_g(timestamp == $b2.timestamp)
+		$h4 : Class_h(val1 == $g3.val1)
+		$d5 : Class_d(val2 == $h4.val2)
+		//$e6 : Class_e(val3 == $d5.val3)
+	then
+		System.out.println("clipsrule7 " + matter.format(new Date() ) );
+end
+/**/
+rule clipsRule8
+	salience 10
+	when
+		$i1 : Class_i(timestamp > 500)
+		$j2 : Class_j(timestamp == $i1.timestamp  && val2 == $i1.val2)
+		$a3 : Class_a(val1 == $j2.val1)
+	then
+		System.out.println("clipsrule8 " + matter.format(new Date() ) );
+end
+/**/
+
+
+
+
+
+
+

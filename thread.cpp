@@ -8,31 +8,43 @@ extern CRITICAL_SECTION g_print;
 extern list<BetaNode*> activeBetaNodeList;
 extern CRITICAL_SECTION g_cs;
 
-void factToAMOnThread(Fact* fact,AlphaNode* root){
+void processFactAlphaMatchOnThread(Fact* fact,AlphaMemory* AMemory)
+{
+        AMemory->alphaMemory.push_back(fact);
+        AlphaMatch* am = new AlphaMatch(fact);
+        for(size_t i = 0; i < AMemory->betaNodes.size(); i++)
+        {
+            //cout<<"one fact"<<endl;
+            //networkRight(am,root->betaNodes[i]);
+            ActiveJoinNode* oneActiveNode = new ActiveJoinNode();
+            oneActiveNode->AM = am;oneActiveNode->PM = NULL;
+            oneActiveNode->curNode = (AMemory->betaNodes[i]);
+            //oneActiveNode->realiseTime = am->realiseTime;
+            AddActiveNode(oneActiveNode);
+        }
+}
+void alphaNetworkMatchOnThread(Fact* fact,AlphaNode* r){
 
-    root = root->child[fact->elementName];
-    while(!root->isAM)
+    //DATA_OBJECT* arg1 = fact->attr_val[r->checkAttriName];
+    if(r->functionName == NULL || r->functionName(fact->attr_val[r->checkAttriName],r->cmpDATA))
     {
-        string check = root->checkAttriName;
-        //cout<<"alpha check: "<<check<<endl;
-        if(root->child.find(fact->attr_val[check]->value) != root->child.end())
-            root = root->child[fact->attr_val[check]->value];
-        else
-            root = root->child["ALL"];
+        if(r->AM != NULL)
+        {
+            processFactAlphaMatchOnThread(fact,r->AM);
+        }
+        for(size_t i = 0; i < r->child.size();i++)
+        {
+            alphaNetworkMatchOnThread(fact,r->child[i]);
+        }
     }
+    return ;
+}
+void factToAMOnThread(Fact* fact,ElementTypeNode* root){
 
-    root->alphaMemory.push_back(fact);
-    AlphaMatch* am = new AlphaMatch(fact);
-    for(size_t i = 0; i < root->betaNodes.size(); i++)
-    {
-
-        ActiveJoinNode* oneActiveNode = new ActiveJoinNode();
-        oneActiveNode->AM = am;oneActiveNode->PM = NULL;
-        oneActiveNode->curNode = (root->betaNodes[i]);
-        //oneActiveNode->realiseTime = am->realiseTime;
-        AddActiveNode(oneActiveNode);
-    }
+    AlphaNode* r = root->alphaNodes[fact->elementName];
+    alphaNetworkMatchOnThread(fact,r);
     //cout<<"factToAMOnThread"<<endl;
+
     return ;
 }
 
@@ -43,7 +55,7 @@ void AddActiveNode(ActiveJoinNode* oneNode)
     BetaNode* &curNode = oneNode->curNode;
     curNode->instance.push_back(oneNode);
     curNode->numOfInstance += 1;
-
+    //cout<<"add one: "<< curNode<<endl;
     if(curNode->numOfInstance == 1)
     {
         EnterCriticalSection(&g_cs);
@@ -84,6 +96,7 @@ ActiveJoinNode* GetOneBestActiveNode(){
         rtnNode = curNode->instance.front();
 	else{
         curNode->isRunning = false;
+        //this is a bug ...
         cout<<"error: instance: "<<curNode->numOfInstance<<endl;
 		LeaveCriticalSection(&(curNode->nodeSection));
 		return NULL;
@@ -118,6 +131,7 @@ void networkRightOnThread(AlphaMatch* rhsBinds,BetaNode* curNode)
         for(size_t k = 0; k < curNode->childNode.size();k++)
 		{
             //networkLeft(links,curNode->childNode[k]);
+            //cout<<"right: "<<rhsBinds->fact->elementName<<endl;
             ActiveJoinNode* oneNode = new ActiveJoinNode();
             oneNode->AM = NULL;oneNode->PM = links;
             oneNode->curNode = curNode->childNode[k];
@@ -147,6 +161,7 @@ void networkRightOnThread(AlphaMatch* rhsBinds,BetaNode* curNode)
 }
 void networkLeftOnThread(PartialMatch* lhsBinds,BetaNode* curNode)
 {
+    //cout<<"networkLeftOnThread"<<endl;
     curNode->leftMemory.push_back(lhsBinds);
     if(curNode->ruleToActive.size()){
         LARGE_INTEGER curTime;
@@ -157,7 +172,7 @@ void networkLeftOnThread(PartialMatch* lhsBinds,BetaNode* curNode)
         return ;
     }
 
-    //cout<<"networkLeftOnThread"<<endl;
+
 	list<AlphaMatch*> &rightMemory = curNode->rightMemory;
 
 	for (list<AlphaMatch*>::iterator it = rightMemory.begin(); it != rightMemory.end();it++)

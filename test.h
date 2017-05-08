@@ -4,9 +4,9 @@
 #include "evaluation.h"
 
 string readRule(ifstream& ifile);
-AlphaNode* buildReteNetWork();
+ElementTypeNode* buildReteNetWork();
 AlphaNode* buildReteNetWork(ifstream&);
 
-AlphaNode* buildReteNetWork();
+void buildReteNetWork4Rules(ElementTypeNode* root,vector<string>&,int&);
 
 #endif // _TEST_H_

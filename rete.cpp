@@ -2,27 +2,41 @@
 #include <cstdio>
 #include "rete.h"
 
-void factToAM(Fact* fact,AlphaNode* root){
+void processFactAlphaMatch(Fact* fact,AlphaMemory* AMemory)
+{
+        AMemory->alphaMemory.push_back(fact);
+        AlphaMatch* am = new AlphaMatch(fact);
+        for(size_t i = 0; i < AMemory->betaNodes.size(); i++)
+        {
+            //cout<<"one fact"<<endl;
+            networkRight(am,AMemory->betaNodes[i]);
+        }
+        return ;
+}
+void alphaNetworkMatch(Fact* fact,AlphaNode* r){
 
-    root = root->child[fact->elementName];
-    while(!root->isAM)
+    //DATA_OBJECT* arg1 = fact->attr_val[r->checkAttriName];
+    if(r->functionName == NULL || r->functionName(fact->attr_val[r->checkAttriName],r->cmpDATA))
     {
-        string check = root->checkAttriName;
-        //cout<<"alpha check: "<<check<<endl;
-        if(root->child.find(fact->attr_val[check]->value) != root->child.end())
-            root = root->child[fact->attr_val[check]->value];
-        else
-            root = root->child["ALL"];
+        if(r->AM != NULL)
+        {
+            processFactAlphaMatch(fact,r->AM);
+        }
+        for(size_t i = 0; i < r->child.size();i++)
+        {
+            alphaNetworkMatch(fact,r->child[i]);
+        }
+    }
 
-    }
-    root->alphaMemory.push_back(fact);
-    AlphaMatch* am = new AlphaMatch(fact);
-    for(size_t i = 0; i < root->betaNodes.size(); i++)
-    {
-        networkRight(am,root->betaNodes[i]);
-    }
+    return ;
+}
+void factToAM(Fact* fact,ElementTypeNode* root){
+
+    AlphaNode* r = root->alphaNodes[fact->elementName];
+    alphaNetworkMatch(fact,r);
 
     //cout<<root->alphaMemory.size()<<endl;
+    return ;
 }
 
 PartialMatch* mergePartialMatch(PartialMatch* lhsBinds,AlphaMatch* alphaMatch)
@@ -93,7 +107,8 @@ void networkLeft(PartialMatch* lhsBinds,BetaNode* curNode)
     if(curNode->ruleToActive.size()){
         LARGE_INTEGER curTime;
         QueryPerformanceCounter(&curTime);
-        printf("rule %lld\n",curTime.QuadPart);
+        //printf("%s %lld\n",curNode->ruleToActive,curTime.QuadPart);
+        cout<<curNode->ruleToActive<<" "<<curTime.QuadPart<<endl;
         return ;
     }
 

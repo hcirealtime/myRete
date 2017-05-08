@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+
 #include "help.h"
 
 vector<string>& split(const string& str,char delim,vector<string>& result)
@@ -26,7 +28,7 @@ void printFact(Fact* f){
 }
 string deletesub(string &str, const string &sub, int n)
 {
-	int m, flag = 0, num = 0;           
+	int m, flag = 0, num = 0;
 	while (flag == 0)
 	{
 		m = str.find(sub);
@@ -34,7 +36,7 @@ string deletesub(string &str, const string &sub, int n)
 			flag = 1;
 		else
 		{
-			str.erase(m, n);           
+			str.erase(m, n);
 			num++;
 		}
 	}

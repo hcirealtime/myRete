@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1493880413 source:d:\forwork\c++\myrete\main.cpp
+1494246062 source:d:\forwork\c++\myrete\main.cpp
 	<iostream>
 	<fstream>
 	<process.h>
@@ -10,25 +10,29 @@
 	"constant.h"
 	"rtdb.h"
 
-1493880331 source:d:\forwork\c++\myrete\fact.cpp
+1493888042 source:d:\forwork\c++\myrete\fact.cpp
 	<iostream>
 	"fact.h"
 	"help.h"
 
-1492866948 d:\forwork\c++\myrete\fact.h
+1494246200 d:\forwork\c++\myrete\fact.h
 	<string>
 	<map>
+	<unordered_map>
+	<fstream>
 
-1493880331 source:d:\forwork\c++\myrete\help.cpp
+1494246216 source:d:\forwork\c++\myrete\help.cpp
 	<iostream>
+	<sstream>
 	"help.h"
 
-1493880331 d:\forwork\c++\myrete\help.h
+1493906262 d:\forwork\c++\myrete\help.h
 	<string>
 	<vector>
+	<sstream>
 	"fact.h"
 
-1493880331 d:\forwork\c++\myrete\rete.h
+1494233935 d:\forwork\c++\myrete\rete.h
 	<windows.h>
 	<string>
 	<list>
@@ -38,39 +42,44 @@
 	"fact.h"
 	"thread.h"
 
-1493880331 d:\forwork\c++\myrete\test.h
+1494232368 d:\forwork\c++\myrete\test.h
 	"rete.h"
 	"evaluation.h"
 
-1493880331 source:d:\forwork\c++\myrete\test.cpp
+1494232846 source:d:\forwork\c++\myrete\test.cpp
 	<iostream>
 	<string>
 	<CString>
 	<fstream>
+	<cstdio>
+	<sstream>
 	"test.h"
 	"help.h"
 	"test.h"
 
-1493040772 source:d:\forwork\c++\myrete\rete.cpp
+1494232662 source:d:\forwork\c++\myrete\rete.cpp
 	<iostream>
 	<cstdio>
 	"rete.h"
 
-1493037420 d:\forwork\c++\myrete\thread.h
+1493983284 d:\forwork\c++\myrete\thread.h
 	"fact.h"
 
 1492515093 d:\forwork\c++\myrete\setup.h
 
-1493040358 source:d:\forwork\c++\myrete\evaluation.cpp
+1494229098 source:d:\forwork\c++\myrete\evaluation.cpp
 	<map>
+	<iostream>
+	<cstdlib>
 	"evaluation.h"
+	"help.h"
 
 1493040373 d:\forwork\c++\myrete\evaluation.h
 	<string>
 	<functional>
 	"fact.h"
 
-1493040629 source:d:\forwork\c++\myrete\thread.cpp
+1494235322 source:d:\forwork\c++\myrete\thread.cpp
 	<cstdio>
 	<iostream>
 	"thread.h"

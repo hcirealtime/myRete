@@ -6,7 +6,7 @@ class BetaNode;
 class AlphaMatch;
 class PartialMatch;
 class AlphaNode;
-
+class ElementTypeNode;
 struct ThreadNode
 {
     int threadID;
@@ -24,6 +24,6 @@ void AddActiveNode(ActiveJoinNode*);
 ActiveJoinNode* GetOneBestActiveNode();
 void networkRightOnThread(AlphaMatch*,BetaNode*);
 void networkLeftOnThread(PartialMatch*,BetaNode*);
-void factToAMOnThread(Fact*,AlphaNode*);
+void factToAMOnThread(Fact*,ElementTypeNode*);
 
 #endif // _THREAD_H_
